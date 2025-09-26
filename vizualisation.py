@@ -149,3 +149,61 @@ def print_image_stats(data, image_index=0):
     print(f"{'Mean':<15} {np.mean(img):>10.4f}")
     print(f"{'Median':<15} {np.median(img):>10.4f}")
     print(50*'*')
+
+
+
+def create_video_from_images_with_labels(images, labels, output_path='output_video.mp4', fps=5):
+    """
+    Create a video from grayscale images with a small shape drawn according to the label.
+
+    Parameters
+    ----------
+    images : np.ndarray of shape (n_images, height, width)
+        Grayscale images.
+    labels : np.ndarray of shape (n_images,)
+        Labels (0=circle, 1=square, 2=triangle).
+    output_path : str
+        Path to save the video file.
+    fps : int
+        Frames per second (speed of the video).
+    """
+    n_images, height, width = images.shape
+
+    # Video writer in color (3 channels)
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(output_path, fourcc, fps, (width, height), isColor=True)
+
+    print(f"Creating video with {n_images} frames at {fps} FPS...")
+
+    for i in range(n_images):
+        current_image = images[i].astype(np.float32)
+
+        # Normalize to 0-255 and convert to uint8
+        img_normalized = cv2.normalize(current_image, None, 0, 255, cv2.NORM_MINMAX)
+        img_uint8 = img_normalized.astype(np.uint8)
+
+        # Convert grayscale to BGR for color drawing
+        img_color = cv2.cvtColor(img_uint8, cv2.COLOR_GRAY2BGR)
+
+        # Coordinates for annotation (top right corner)
+        x, y = width - 20, 20  # top-right corner
+
+        # Choose shape and draw it in yellow (BGR=(0,255,255))
+        if labels[i] == 0:  # circle
+            cv2.circle(img_color, (x, y), 8, (0, 255, 255), -1)
+        elif labels[i] == 1:  # square
+            cv2.rectangle(img_color, (x - 10, y - 10), (x + 10, y + 10), (0, 255, 255), -1)
+        elif labels[i] == 2:  # triangle
+            pts = np.array([[x, y - 10], [x - 10, y + 10], [x + 10, y + 10]], np.int32)
+            pts = pts.reshape((-1, 1, 2))
+            cv2.fillPoly(img_color, [pts], (0, 255, 255))
+
+        # Write frame
+        out.write(img_color)
+
+        if (i + 1) % 5 == 0 or i == 0 or i == n_images - 1:
+            print(f"Processed frame {i+1}/{n_images}")
+
+    out.release()
+    print(f"Video saved as {output_path}")
+    print(f"Video dimensions: {width}x{height}, Duration: {n_images/fps:.1f} s")

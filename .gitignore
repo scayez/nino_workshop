@@ -1,0 +1,6 @@
+# Ignorer les caches Python
+__pycache__/
+*.pyc
+
+# Ignorer tout le dossier data et son contenu
+data/
