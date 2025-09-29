@@ -8,3 +8,6 @@ data/*
 # Mais ne pas ignorer ces deux fichiers :
 !data/nino.jpg
 !data/rgb.png
+!data/rgb.png
+!data/ma_video.mp4
+!data/fluo_latex_1.tif
