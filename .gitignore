@@ -3,4 +3,8 @@ __pycache__/
 *.pyc
 
 # Ignorer tout le dossier data et son contenu
-data/
+data/*
+
+# Mais ne pas ignorer ces deux fichiers :
+!data/nino.jpg
+!data/rgb.png
