@@ -4,10 +4,13 @@ __pycache__/
 
 # Ignorer tout le dossier data et son contenu
 data/*
-
 # Mais ne pas ignorer ces deux fichiers :
 !data/nino.jpg
 !data/rgb.png
 !data/rgb.png
 !data/in_situ_TEM_Ni_deposition.mp4
-!data/fluo_latex_1.tif
+!data/fluo_latex_1.tif*
+
+# Ignorer tout le dossier data et son contenu
+figures/origin/*
+figures/old/*
