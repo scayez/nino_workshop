@@ -14,3 +14,4 @@ data/*
 # Ignorer tout le dossier data et son contenu
 figures/origin/*
 figures/old/*
+corrections.ipynb
